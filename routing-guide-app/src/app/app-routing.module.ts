@@ -7,13 +7,14 @@ import {UserComponent} from './users/user/user.component';
 import {EditServerComponent} from './servers/edit-server/edit-server.component';
 import {ServerComponent} from './servers/server/server.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {AuthGuard} from './auth-guard.service';
 
 
 const routes: Routes = [
   { path: 'users', component: UsersComponent, children: [
       { path: ':id/:name', component: UserComponent },
     ] },
-  { path: 'servers', component: ServersComponent, children: [
+  { path: 'servers', canActivate:[AuthGuard], component: ServersComponent, children: [
       { path: ':id/edit', component: EditServerComponent },
       { path: ':id', component: ServerComponent },
     ] },
@@ -22,8 +23,10 @@ const routes: Routes = [
   { path: '**', redirectTo: '/not-found' }
   ];
 
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+// @ts-ignore
 export class AppRoutingModule { }
