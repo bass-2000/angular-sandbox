@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Form, NgForm} from '@angular/forms';
 
 @Component({
@@ -7,11 +7,14 @@ import {Form, NgForm} from '@angular/forms';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  defaultQuestion = 'pet';
+  answer = '';
+
   suggestUserName() {
     const suggestedName = 'Superuser';
   }
 
-  onSubmit(form: NgForm){
+  onSubmit(form: NgForm) {
     console.log(form);
   }
 }
