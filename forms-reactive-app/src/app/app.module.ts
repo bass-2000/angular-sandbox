@@ -4,14 +4,20 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
+import { AssignmentComponent } from './assignment/assignment.component';
+import {AppRoutingModule} from './app-routing.module';
+import { BaseComponent } from './base/base.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AssignmentComponent,
+    BaseComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
