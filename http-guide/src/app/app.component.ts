@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
+import {PostModel} from './post.model';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,10 @@ export class AppComponent implements OnInit {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(postData: PostModel) {
     // Send Http request
     this.http
-      .post(
+      .post<{name: string}>(
         this.myUrl,
         postData
       )
@@ -38,9 +39,9 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get(this.myUrl)
+    this.http.get<{[key: string]: PostModel }>(this.myUrl)
       .pipe(map(responseData => {
-        const postsArray = [];
+        const postsArray: PostModel[] = [];
         for (const key in responseData){
           if (responseData.hasOwnProperty(key)){
             postsArray.push({...responseData[key], id: key});
