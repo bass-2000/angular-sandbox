@@ -10,7 +10,7 @@ import {PostModel} from './post.model';
 })
 export class AppComponent implements OnInit {
    myUrl = 'https://angularlearing.firebaseio.com/posts.json';
-  loadedPosts = [];
+  loadedPosts : PostModel[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
         return postsArray;
       }))
       .subscribe(posts => {
-      console.log(posts);
+      this.loadedPosts = posts;
     });
   }
 }
