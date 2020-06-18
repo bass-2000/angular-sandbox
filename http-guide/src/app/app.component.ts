@@ -10,7 +10,7 @@ import {PostModel} from './post.model';
 })
 export class AppComponent implements OnInit {
    myUrl = 'https://angularlearing.firebaseio.com/posts.json';
-  loadedPosts : PostModel[] = [];
+  loadedPosts: PostModel[] = [];
   isFetching = false;
 
   constructor(private http: HttpClient) {}
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.isFetching=true;
+    this.isFetching = true;
     this.http.get<{[key: string]: PostModel }>(this.myUrl)
       .pipe(map(responseData => {
         const postsArray: PostModel[] = [];
@@ -52,8 +52,8 @@ export class AppComponent implements OnInit {
         return postsArray;
       }))
       .subscribe(posts => {
-        this.isFetching=false;
-      this.loadedPosts = posts;
+        this.isFetching = false;
+        this.loadedPosts = posts;
     });
   }
 }
