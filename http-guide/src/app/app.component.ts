@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
 import {PostModel} from './post.model';
+import {PostsService} from './posts.service';
 
 @Component({
   selector: 'app-root',
@@ -9,51 +9,34 @@ import {PostModel} from './post.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-   myUrl = 'https://angularlearing.firebaseio.com/posts.json';
+  myUrl = 'https://angularlearing.firebaseio.com/posts.json';
   loadedPosts: PostModel[] = [];
   isFetching = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private postsService: PostsService) {
+  }
 
   ngOnInit() {
-    this.fetchPosts();
+    this.isFetching = true;
+    this.postsService.fetchPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    });
   }
 
   onCreatePost(postData: PostModel) {
-    // Send Http request
-    this.http
-      .post<{name: string}>(
-        this.myUrl,
-        postData
-      )
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
+    this.postsService.createAndStorePost(postData.title, postData.content);
   }
 
   onFetchPosts() {
-    this.fetchPosts();
+    this.isFetching = true;
+    this.postsService.fetchPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    });
   }
 
   onClearPosts() {
     // Send Http request
-  }
-
-  private fetchPosts() {
-    this.isFetching = true;
-    this.http.get<{[key: string]: PostModel }>(this.myUrl)
-      .pipe(map(responseData => {
-        const postsArray: PostModel[] = [];
-        for (const key in responseData){
-          if (responseData.hasOwnProperty(key)){
-            postsArray.push({...responseData[key], id: key});
-          }
-        }
-        return postsArray;
-      }))
-      .subscribe(posts => {
-        this.isFetching = false;
-        this.loadedPosts = posts;
-    });
   }
 }
