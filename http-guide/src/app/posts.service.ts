@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, catchError } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
 
-import {PostModel} from './post.model';
+import { PostModel } from './post.model';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -14,29 +14,46 @@ export class PostsService {
 
   createAndStorePost(title: string, content: string) {
     const postData: PostModel = { title, content };
-    // Send Http request
     this.http
-      .post<{name: string}>(
+      .post<{ name: string }>(
         this.myUrl,
         postData
       )
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
+      .subscribe(
+        responseData => {
+          console.log(responseData);
+        },
+        error => {
+          this.error.next(error.message);
+        }
+      );
   }
 
   fetchPosts() {
-    return this.http.get<{[key: string]: PostModel }>(this.myUrl)
-      .pipe(map(responseData => {
-        const postsArray: PostModel[] = [];
-        for (const key in responseData){
-          if (responseData.hasOwnProperty(key)){
-            postsArray.push({...responseData[key], id: key});
+    return this.http
+      .get<{ [key: string]: PostModel }>(
+        this.myUrl
+      )
+      .pipe(
+        map(responseData => {
+          const postsArray: PostModel[] = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              postsArray.push({ ...responseData[key], id: key });
+            }
           }
-        }
-        return postsArray;
-      }));
+          return postsArray;
+        }),
+        catchError(errorRes => {
+          // Send to analytics server
+          return throwError(errorRes);
+        })
+      );
   }
 
-
+  deletePosts() {
+    return this.http.delete(
+      this.myUrl
+    );
+  }
 }
