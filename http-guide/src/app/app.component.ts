@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 import { PostModel } from './post.model';
@@ -31,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.loadedPosts = posts;
       },
       error => {
+        this.isFetching = false;
         this.error = error.message;
       }
     );
@@ -50,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.loadedPosts = posts;
       },
       error => {
+        this.isFetching = false;
         this.error = error.message;
         console.log(error);
       }
@@ -65,5 +66,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.errorSub.unsubscribe();
+  }
+
+  onErrorHandle() {
+    this.error = null;
   }
 }
