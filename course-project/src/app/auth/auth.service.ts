@@ -74,7 +74,7 @@ export class AuthService {
     if (loadedUser.token) {
       // this.user.next(loadedUser);
       this.store.dispatch(
-        new AuthActions.Login({
+        new AuthActions.AuthenticateSuccess({
             email: loadedUser.email,
             userId: loadedUser.id,
             token: loadedUser.token,
@@ -109,7 +109,7 @@ export class AuthService {
     const user = new User(email, userId, token, expirationDate);
     // this.user.next(user);
     this.store.dispatch(
-      new AuthActions.Login({
+      new AuthActions.AuthenticateSuccess({
         email: user.email,
         userId: user.id,
         token: user.token,
