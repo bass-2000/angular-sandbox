@@ -15,12 +15,15 @@
   <hr>
   <div class="row">
     <div class="col-xs-12">
-      <input #input type="text">
+      <label>
+        <input #input type="text">
+      </label>
       <button (click)="onAdd(input.value)" class="btn btn-primary">Add Item!</button>
       <hr>
       <ul class="list-group">
         <li
           (click)="onDelete(item)"
+          [@list1]
           *ngFor="let item of list"
           class="list-group-item">
           {{ item }}
